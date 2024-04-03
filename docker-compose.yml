@@ -2,7 +2,7 @@ version: "3"
 
 services:
   # Note: If you are assigning a custom name to your db service on the line below, make sure it does not contain underscores
-  db:
+  postgres-db:
     image: "postgres:latest"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -23,12 +23,12 @@ services:
   supertokens:
     image: registry.supertokens.io/supertokens/supertokens-postgresql:9.0
     depends_on:
-      db:
+      postgres-db:
         condition: service_healthy
     ports:
       - 3567:3567
     environment:
-      POSTGRESQL_CONNECTION_URI: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}"
+      POSTGRESQL_CONNECTION_URI: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres-db:5432/${POSTGRES_DB}"
       API_KEYS: ${SUPERTOKENS_API_KEYS}
     networks:
       - app_network

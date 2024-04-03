@@ -1,6 +1,12 @@
 import express from "express";
 import cors from "cors";
-require("dotenv").config({ path: "../.env" });
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import compression from "compression";
+import dotenv from "dotenv";
+import morganMiddleware from "./src/middlewares/morgan.middleware";
+import logger from "./src/utils/logger";
+dotenv.config({ path: "../.env" });
 import supertokens from "supertokens-node";
 import { verifySession } from "supertokens-node/recipe/session/framework/express";
 import {
@@ -10,9 +16,17 @@ import {
 } from "supertokens-node/framework/express";
 import { getWebsiteDomain, SuperTokensConfig } from "./config";
 import Multitenancy from "supertokens-node/recipe/multitenancy";
+
+const BACKEND_PORT = process.env.BACKEND_PORT || 3000;
+
 supertokens.init(SuperTokensConfig);
 
 const app = express();
+
+app.use(morganMiddleware);
+app.use(compression());
+app.use(cookieParser());
+app.use(bodyParser.json());
 
 app.use(
   cors({
@@ -25,6 +39,15 @@ app.use(
 
 // This exposes all the APIs from SuperTokens to the client.
 app.use(middleware());
+
+// This API is used to check if the backend is running.
+app.get("/api/status", (req, res) => {
+  logger.info("Checking the API status: Everything is OK");
+  res.status(200).send({
+    status: "UP",
+    message: "The API is up and running!",
+  });
+});
 
 // An example API that requires session verification
 app.get("/sessioninfo", verifySession(), async (req: SessionRequest, res) => {
@@ -47,4 +70,6 @@ app.get("/tenants", async (req, res) => {
 // returns 401 to the client.
 app.use(errorHandler());
 
-app.listen(3001, () => console.log(`API Server listening on port 3001`));
+app.listen(BACKEND_PORT, () =>
+  logger.info(`Server is running on http://localhost:${BACKEND_PORT}`)
+);
