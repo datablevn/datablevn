@@ -1,7 +1,6 @@
 import { Sequelize } from "sequelize";
 import logger from "../utils/logger";
 import dotenv from "dotenv";
-
 // Load environment variables from .env file
 dotenv.config();
 
@@ -18,7 +17,7 @@ const isProduction = NODE_ENV === "production";
 
 export const sequelize = new Sequelize({
   dialect: "postgres",
-  host: POSTGRES_HOST,
+  host: POSTGRES_HOST || "localhost",
   port: parseInt(POSTGRES_PORT || "5432"),
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
