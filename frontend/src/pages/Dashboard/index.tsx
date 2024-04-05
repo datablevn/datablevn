@@ -356,15 +356,15 @@ export default function Dashboard() {
                         liam@example.com
                       </div>
                     </TableCell>
-                    <TableCell className="md:table-cell hidden">
+                    <TableCell className="md:table-cell hidden text-center">
                       Image Annotation
                     </TableCell>
-                    <TableCell className="md:table-cell hidden">
+                    <TableCell className="md:table-cell hidden text-center">
                       <Badge className="text-xs" variant="outline">
                         Submitted
                       </Badge>
                     </TableCell>
-                    <TableCell className="md:table-cell hidden">
+                    <TableCell className="md:table-cell hidden text-center">
                       2024-06-23
                     </TableCell>
                     <TableCell className="text-right">$250.00</TableCell>
@@ -376,15 +376,15 @@ export default function Dashboard() {
                         joesmith@example.com
                       </div>
                     </TableCell>
-                    <TableCell className="md:table-cell hidden">
+                    <TableCell className="md:table-cell hidden text-center">
                       Text Annotation
                     </TableCell>
-                    <TableCell className="md:table-cell hidden">
+                    <TableCell className="md:table-cell hidden text-center">
                       <Badge className="text-xs" variant="outline">
                         On Going
                       </Badge>
                     </TableCell>
-                    <TableCell className="md:table-cell hidden">
+                    <TableCell className="md:table-cell hidden text-center">
                       2024-06-23
                     </TableCell>
                     <TableCell className="text-right">$500.00</TableCell>
