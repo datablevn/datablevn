@@ -14,8 +14,12 @@ import {
   errorHandler,
   SessionRequest,
 } from "supertokens-node/framework/express";
-import { getWebsiteDomain, SuperTokensConfig } from "./config";
+import {
+  getWebsiteDomain,
+  SuperTokensConfig,
+} from "./src/configs/supertokens.config";
 import Multitenancy from "supertokens-node/recipe/multitenancy";
+import { connectDatabases } from "./src/configs/index.config";
 
 const BACKEND_PORT = process.env.BACKEND_PORT || 3000;
 
@@ -70,6 +74,19 @@ app.get("/tenants", async (req, res) => {
 // returns 401 to the client.
 app.use(errorHandler());
 
-app.listen(BACKEND_PORT, () =>
-  logger.info(`Server is running on http://localhost:${BACKEND_PORT}`)
-);
+// app.listen(BACKEND_PORT, () =>
+//   logger.info(`Server is running on http://localhost:${BACKEND_PORT}`)
+// );
+
+async function startServer() {
+  try {
+    await connectDatabases();
+    app.listen(BACKEND_PORT, () =>
+      logger.info(`Server is running on http://localhost:${BACKEND_PORT}`)
+    );
+  } catch (error) {
+    logger.error("Unable to start the server:", error);
+  }
+}
+
+startServer();

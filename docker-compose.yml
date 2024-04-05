@@ -2,7 +2,7 @@ version: "3"
 
 services:
   # Note: If you are assigning a custom name to your db service on the line below, make sure it does not contain underscores
-  postgres-db:
+  postgres:
     image: "postgres:latest"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -19,16 +19,18 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
 
   supertokens:
     image: registry.supertokens.io/supertokens/supertokens-postgresql:9.0
     depends_on:
-      postgres-db:
+      postgres:
         condition: service_healthy
     ports:
       - 3567:3567
     environment:
-      POSTGRESQL_CONNECTION_URI: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres-db:5432/${POSTGRES_DB}"
+      POSTGRESQL_CONNECTION_URI: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}"
       API_KEYS: ${SUPERTOKENS_API_KEYS}
     networks:
       - app_network
@@ -40,6 +42,30 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: "redis:latest"
+    ports:
+      - ${REDIS_PORT}:6379
+    networks:
+      - app_network
+    restart: unless-stopped
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - redis-data:/data
+    command: /bin/sh -c "redis-server --requirepass $${REDIS_PASSWORD}"
+
 networks:
   app_network:
     driver: bridge
+
+volumes:
+  postgres-data:
+  mongodb-data:
+  redis-data:
