@@ -16,7 +16,7 @@ import morganMiddleware from "./src/middlewares/morgan.middleware";
 import logger from "./src/utils/logger";
 import { connectDatabases } from "./src/configs/index.config";
 import { HealthCheckRoute } from "./src/routes/index.routes";
-
+import initUserRoles from "./src/configs/user-roles.config";
 const BACKEND_PORT = process.env.BACKEND_PORT || 3000;
 
 supertokens.init(SuperTokensConfig);
@@ -43,6 +43,7 @@ app.use(
   })
 );
 
+initUserRoles();
 app.use(middleware()); // This exposes all the APIs from SuperTokens to the client.
 
 // Healthcheck endpoint

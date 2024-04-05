@@ -1,0 +1,29 @@
+{
+  "roles": [
+    {
+      "name": "super-admin",
+      "permissions": ["*"]
+    },
+    {
+      "name": "user",
+      "permissions": [
+        "view-projects",
+        "update-own-profile",
+        "view-own-profile",
+        "delete-own-profile"
+      ]
+    },
+    {
+      "name": "client",
+      "permissions": [
+        "create-projects",
+        "view-projects",
+        "delete-projects",
+        "update-projects",
+        "update-own-profile",
+        "view-own-profile",
+        "delete-own-profile"
+      ]
+    }
+  ]
+}
